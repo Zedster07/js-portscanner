@@ -2,40 +2,11 @@
 var net = require('net')
 var Socket = net.Socket
 const {Command} = require('commander');
-
+const services = require('./services.json')
 class ScanPort {
   constructor(host, port, timeout=8000){
     this.host = host;
     this.port = port;
-    this.services = {
-      "80": "HTTP",
-      "443": "HTTPS",
-      "21": "FTP (Control)",
-      "20": "FTP (Data)",
-      "22": "SSH",
-      "23": "Telnet",
-      "25": "SMTP",
-      "53": "DNS",
-      "67": "DHCP (Server)",
-      "68": "DHCP (Client)",
-      "161": "SNMP",
-      "162": "SNMP Trap",
-      "3128": "HTTP Proxy (Squid)",
-      "8080": "HTTP Proxy (Alternative)",
-      "143": "IMAP",
-      "993": "IMAPS",
-      "110": "POP3",
-      "995": "POP3S",
-      "3306": "MySQL",
-      "5432": "PostgreSQL",
-      "3389": "RDP",
-      "389": "LDAP",
-      "123": "NTP",
-      "445": "SMB",
-      "548": "AFP",
-      "465": "SMTPS",
-      "8080": "HTTP Alt"
-    }
     this.timeout = timeout;
     this.socket = new Socket();
     this.socket.on('connect', () => {
@@ -62,7 +33,7 @@ class ScanPort {
     this.socket.on('close', (exception) => {
       if (exception && !this.connectionRefused) { this.error = this.error || exception } else { this.error = null }
       if(this.status == 'open') {
-        console.log(`- PORT ${this.port}/${this.services[this.port.toString()] || "UNKNOWN"} ${this.status}`);
+        console.log(`- PORT ${this.port}/${services[this.port.toString()] || "UNKNOWN"} ${this.status}`);
       }
     })
     this.socket.connect(this.port, this.host)
