@@ -62,7 +62,7 @@ class ScanPort {
     this.socket.on('close', (exception) => {
       if (exception && !this.connectionRefused) { this.error = this.error || exception } else { this.error = null }
       if(this.status == 'open') {
-        console.log(`- PORT ${this.port}/${this.services[this.port.toString() || "UNKNOWN"]} ${this.status}`);
+        console.log(`- PORT ${this.port}/${this.services[this.port.toString()] || "UNKNOWN"} ${this.status}`);
       }
     })
     this.socket.connect(this.port, this.host)
